@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>JavaScript Grade Distribution</title>
+    <meta name="author" content="Kyle Huggins">
+    <meta name="description" content="JavaScript Grade Distribution Graph">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/kjhx/francisco/v1.3.1/francisco.css">
+    <style>
+      #err-input, #graph-container { display: none; }
+
+      .graph {
+        margin-top: 4rem;
+        width: 12.5rem;
+        min-height: 10rem;
+        border-left: solid;
+        border-bottom: solid;
+      }
+
+      .graph tr { vertical-align: bottom; }
+
+      #graph-container table tr td {
+        width: 2.3rem;
+        text-align: center;
+      }
+
+      #bar0 { background-color: #FFC857; }
+      #bar1 { background-color: #E9724C; }
+      #bar2 { background-color: #49D49D; }
+      #bar3 { background-color: #558564; }
+      #bar4 { background-color: #36382E; }
+    </style>
+  </head>
+  <!---->
+  <body>
+    <div frame>
+      <h1>JavaScript Grade Distribution</h1>
+      <div id="err-input">
+        <h3>error_</h3>
+        <p>Please enter scores into the dialog box.</p>
+      </div>
+      <div id="graph-container">
+        <table class="graph">
+          <tr>
+            <td><div id="bar0" style="height:60px"></div></td>
+            <td><div id="bar1" style="height:40px"></div></td>
+            <td><div id="bar2" style="height:20px"></div></td>
+            <td><div id="bar3" style="height:0px" ></div></td>
+            <td><div id="bar4" style="height:40px"></div></td>
+          </tr>
+        </table>
+        <table>
+          <tr>
+            <td>A</td>
+            <td>B</td>
+            <td>C</td>
+            <td>D</td>
+            <td>F</td>
+          </tr>
+          <tr>
+            <td id="c0">6</td>
+            <td id="c1">4</td>
+            <td id="c2">2</td>
+            <td id="c3">0</td>
+            <td id="c4">4</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </body>
+  <!---->
+  <script>
+    // ex. case: 45 78 98 83 86 99 90 59
+    var scoresStr = prompt("Enter scores:");
+
+    if (!scoresStr) {
+      document.getElementById("err-input").style.display = "block";
+    } else {
+      var graph = document.getElementById("graph-container");
+      var grades = scoresStr.split(' ');
+      var gradeSplit = [0, 0, 0, 0, 0];
+
+      for (let i = 0; i < grades.length; i++) {
+        if (grades[i] >= 90) {
+          gradeSplit[0] += 1;
+        } else if (grades[i] >= 80) {
+          gradeSplit[1] += 1;
+        } else if (grades[i] >= 70) {
+          gradeSplit[2] += 1;
+        } else if (grades[i] >= 60) {
+          gradeSplit[3] += 1;
+        } else {
+          gradeSplit[4] += 1;
+        }
+      }
+
+      for (let i = 0; i < gradeSplit.length; i++) {
+        document.getElementById("c" + i).innerHTML = gradeSplit[i];
+      }
+
+      for (let i = 0; i < gradeSplit.length; i++) {
+        document.getElementById("bar" + i).style.height = (gradeSplit[i] * 10) + "px";
+      }
+
+      graph.style.display = "block";
+    }
+  </script>
+</html>
