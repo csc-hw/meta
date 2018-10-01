@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Temperature Conversion</title>
+    <meta name="author" content="Kyle Huggins">
+    <meta name="description" content="JavaScript Temperature Conversion">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/kjhx/francisco/v1.4/francisco.css" />
+    <style>
+    label, input {
+      display: block;
+    }
+
+    input[type="number"] {
+      height: 3.8rem;
+      padding: 0 10px;
+      border: 1px solid #D1D1D1;
+      border-radius: 4px;
+      margin-bottom: 2rem;
+    }
+
+    .weather-container {
+      margin-top: 6rem;
+    }
+    </style>
+    <script>
+    window.addEventListener("DOMContentLoaded", function() {
+      var btn = document.getElementById("convert-btn");
+      var f_field = document.getElementById("f_field");
+      var c_field = document.getElementById("c_field");
+
+      btn.addEventListener("click", validateInput);
+      f_field.addEventListener("keydown", function() {
+        c_field.value = "";
+      });
+
+      c_field.addEventListener("keydown", function() {
+        f_field.value = "";
+      });
+    });
+
+    function validateInput() {
+      if (f_field.value == "" && c_field.value == "") {
+        alert("Please enter data to convert.");
+      } else {
+        convertInput();
+      }
+    }
+
+    function convertInput() {
+      if (f_field.value.length > 0) {
+        // calc C based on F value
+        c_field.value = Math.round(((f_field.value - 32 ) * 5/9) * 100) / 100;
+      } else {
+        // calc F based on C value
+        f_field.value = Math.round((c_field.value * 9/5 + 32) * 100) / 100;
+      }
+
+      if (f_field.value >= 50) {
+        document.getElementById("img-weather").src = "warm.gif";
+      } else if (f_field.value < 50 && f_field.value >= 32) {
+        document.getElementById("img-weather").src = "cool.gif";
+      } else  if (f_field.value < 32) {
+        document.getElementById("img-weather").src = "cold.gif";
+      }
+    }
+    </script>
+  </head>
+  <!---->
+  <body>
+    <div class="frame">
+      <h2>JavaScript Temperature Conversion</h2>
+      <div class="row">
+        <div class="half">
+          <label for="temp">Fahrenheit</label>
+          <input placeholder="88&deg; F" type="number" id="f_field" pattern="[-+]?[0-9]*[.,]?[0-9]+">
+        </div>
+        <div class="half">
+          <label for="temp">Celsius</label>
+          <input placeholder="31&deg; C" type="number" id="c_field">
+        </div>
+      </div>
+      <div class="row">
+        <a href="#" id="convert-btn">Convert</a>
+      </div>
+      <div class="row weather-container">
+        <img height="128" id="img-weather" src="warm.gif" alt="Weather Icon">
+      </div>
+    </div>
+  </body>
+  <!---->
+</html>
