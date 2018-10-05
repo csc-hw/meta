@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tic Tac Toe</title>
+    <meta name="author" content="Kyle Huggins">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/kjhx/francisco/v1.4/francisco.css" />
+    <style>
+    .square {
+      float: left;
+      width: 90px;
+      height: 90px;
+      border: 1px solid black;
+      margin: 3px;
+      font: 85px arial, sans-serif;
+      text-align: center;
+      vertical-align: top;
+      cursor: pointer;
+    }
+    .square:hover {
+      border-color: lightgrey;
+	  }
+
+    .t3-row:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+    </style>
+  </head>
+  <!---->
+  <body>
+    <div class="frame">
+      <h1>Tic Tac Toe</h1>
+      <div class="t3-row">
+	       <div class="square" id="c1"></div>
+	       <div class="square" id="c2"></div>
+	       <div class="square" id="c3"></div>
+      </div>
+      <div class="t3-row">
+	       <div class="square" id="c4"></div>
+	       <div class="square" id="c5"></div>
+	       <div class="square" id="c6"></div>
+      </div>
+      <div class="t3-row">
+	       <div class="square" id="c7"></div>
+	       <div class="square" id="c8"></div>
+	       <div class="square" id="c9"></div>
+      </div>
+      <h3 id="turnInfo">TURN INFO</h3>
+      <a href="#" id="newgame-btn">New Game</a>
+    </div>
+  </body>
+  <script>
+  // Global
+  var playerTurn = true;
+  document.getElementById("turnInfo").innerHTML = "Your turn";
+
+  function newGame() {
+    // Reset all pieces
+    for (var i = 1; i <= 9; i++) {
+      document.getElementById("c" + i).innerHTML = "";
+    }
+  };
+
+  function computerMove() {
+    // Keep count of how many times we try to pick an unoccuppied slot so we avoid accidentally getting stuck in the loop
+    var count = 0;
+    var move;
+    var playerAtLocation;
+    do {
+      move = Math.floor(Math.random() * 9) + 1;
+      count++;
+      playerAtLocation = document.getElementById("c" + move).innerHTML;
+    } while (playerAtLocation !== "" && count < 100);
+    if (count == 100) {
+      alert("Computer can't find an open move.");
+      document.getElementById("turnInfo").innerHTML = "Game over";
+    } else {
+      var box = document.getElementById("c" + move);
+      box.innerHTML = "O";
+      box.style.color = "lightskyblue";
+      document.getElementById("turnInfo").innerHTML = "Your turn";
+    }
+    playerTurn = true;
+  }
+
+  function playerMove(e) {
+    var box = e.target;
+    if (box.innerHTML == "" && playerTurn == true) {
+      box.innerHTML = "X";
+      box.style.color = "red";
+      playerTurn = false;
+      document.getElementById("turnInfo").innerHTML = "Computer's turn";
+      setTimeout(computerMove, 1000);
+    } else {
+      playerMove();
+    }
+  };
+
+  window.addEventListener("DOMContentLoaded", function() {
+    // Register event handlers & vars
+    for (var i = 1; i <= 9; i++) {
+      document.getElementById("c" + i).addEventListener("click", playerMove);
+    }
+    document.getElementById("newgame-btn").addEventListener("click", newGame);
+  });
+  </script>
+  <!---->
+</html>
