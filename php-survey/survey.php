@@ -12,6 +12,9 @@
     }
     </style>
     <?php
+    // Do not display notices or errors on webpage
+    ini_set('display_errors', '0');
+
     if ($_POST["input-source"] != "Secret Survey") {
     ?>
     <style>
