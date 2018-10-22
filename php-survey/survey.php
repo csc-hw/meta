@@ -12,7 +12,6 @@
     }
     </style>
     <?php
-    print_r($_POST);
     if ($_POST["input-source"] != "Secret Survey") {
     ?>
     <style>
