@@ -29,16 +29,16 @@
     <?php
     }
 
-    $name = $_POST["name"];
-    $class = $_POST["class"];
+    $name = htmlspecialchars($_POST["name"]);
+    $class = htmlspecialchars($_POST["class"]);
     $gender = $_POST["gender"];
-    $email = $_POST["email"];
-    $pword = $_POST["pword"];
+    $email = htmlspecialchars($_POST["email"]);
+    $pword = htmlspecialchars($_POST["pword"]);
 
     $favCourses = $_POST["courses"];
 
     $grad = $_POST["grad"];
-    $comments = $_POST["comments"];
+    $comments = htmlspecialchars($_POST["comments"]);
     ?>
   </head>
   <!---->
