@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Movie Search</title>
+    <link rel="stylesheet" href="https://unpkg.com/grund.css" />
+    <script type="text/javascript">
+      var query;
+      addEventListener("DOMContentLoaded", function() {
+        document.getElementById("searchBtn").addEventListener("click", searchMovie);
+      });
+
+      function searchMovie() {
+        query = document.getElementById("search").value.trim();
+        console.log("Searching for \"" + query + "\"");
+        if (query.length > 0) {
+          var xhr = new XMLHttpRequest();
+          xhr.addEventListener("load", function() {
+            console.log(this.response);
+            results = "<p>Search results for <b>" + query + "</b></p>\n<ol>";
+            if (this.response.Error) {
+                  results += "<p>Error searching for movie: " + this.response.Error + "</p>";
+               } else {
+                  var movies = this.response.Search;
+                  for (var i = 0; i < movies.length; i++) {
+                     results += "<li><a href='#' id='" + movies[i].imdbID + "'>" + movies[i].Title + "</a></li>\n";
+                  }
+                  results += "</ol>\n";
+               }
+
+               document.getElementById("results").innerHTML = results;
+               // Add the same event handler to every link
+               var anchors = document.getElementsByTagName("a");
+               for (var i = 0; i < anchors.length; i++) {
+                  anchors[i].addEventListener("click", clickMovie);
+               }
+          });
+          xhr.responseType = "json";
+          xhr.open("GET", "https://www.omdbapi.com/?s=" + encodeURIComponent(query) + "&type=movie&apikey=e64d9962");
+          xhr.send();
+          document.getElementById("results").innerHTML = "<p>Searching...</p>";
+        }
+      }
+
+      function clickMovie(event) {
+        var anchor = event.target;
+        var movieId = anchor.id;
+        getMovieDetails(movieId);
+        event.preventDefault();
+      }
+
+      function getMovieDetails(movieId) {
+        console.log("Opening movie " + movieId);
+        var xhr = new XMLHttpRequest();
+        xhr.addEventListener("load", function() {
+          var movie = this.response;
+          console.log(movie);
+          document.getElementById("results").innerHTML = "<h2>" + movie.Title + "</h2><p>" + movie.Year + "  /  " + movie.Rated + "  /  " +  movie.Runtime + "</p><p>iMDB Rating: <strong>" + movie.imdbRating + "</strong></p><p>" + movie.Plot + "</p>";
+        });
+        xhr.responseType = "json";
+        xhr.open("GET", "https://www.omdbapi.com/?i=" + movieId + "&type=movie&apikey=e64d9962");
+        xhr.send();
+        document.getElementById("results").innerHTML = "<p>Fetching...</p>";
+      }
+    </script>
+    <style media="screen">
+      .attr {
+        position: absolute;
+        bottom: 4rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Movie Database</h1>
+    <form action="javascript:searchMovie();">
+      <input type="search" required id="search" placeholder="Title" style="height: 3rem;" autofocus>
+      <input type="button" id="searchBtn" value="Search" style="display: inline;">
+    </form>
+    <div id="results"></div>
+    <div class="attr">
+      <small>App data obtained from <a href='http://www.omdbapi.com/'>OMDb API</a></small>
+    </div>
+  </body>
+</html>
